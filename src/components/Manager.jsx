@@ -1,9 +1,16 @@
-import React from 'react'
-import { useRef ,useState} from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 const Manager = () => {
     const ref = useRef()
-    const [form, setform] = useState({site:"",username:"",password:""})
+    const [form, setform] = useState({ site: "", username: "", password: "" })
+    const [passwordArray, setpasswordArray] = useState([])
+
+    useEffect(() => {
+        let password = localStorage.getItem("password");
+        if (password) {
+            setpasswordArray(JSON.parse(password))
+        }
+    }, [])
 
 
 
@@ -17,13 +24,16 @@ const Manager = () => {
         }
     }
 
-const savepassword = () => {
-  
-}
+    const savepassword = () => {
+        setpasswordArray([...passwordArray, form])
+        localStorage.setItem("password", JSON.stringify([...passwordArray, form]))
+        console.log([...passwordArray, form])
 
-const handlechange=(e) => {
-  setform({...form,[e.target.name]: e.target.value})
-}
+    }
+
+    const handlechange = (e) => {
+        setform({ ...form, [e.target.name]: e.target.value })
+    }
 
 
 
@@ -52,8 +62,8 @@ const handlechange=(e) => {
 
                 <div className="text-black flex flex-col p-4 gap-7">
 
-                {/* input1 site*/}
-                    <input value={form.site}onChange={handlechange} placeholder='Enter website url'
+                    {/* input1 site*/}
+                    <input value={form.site} onChange={handlechange} placeholder='Enter website url'
                         className="border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
                         type="text"
                         name="site"
@@ -62,7 +72,7 @@ const handlechange=(e) => {
 
                     <div className="flex gap-3">
 
-                    {/* input2 username */}
+                        {/* input2 username */}
                         <input value={form.username} onChange={handlechange} placeholder='Enter Username'
                             className="border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
                             type="text" name="username"
@@ -83,15 +93,39 @@ const handlechange=(e) => {
                     </div>
 
                     <button onClick={savepassword}
-                    className="self-center flex items-center gap-1 font-bold
+                        className="self-center flex items-center gap-1 font-bold
                     bg-green-600 rounded-full px-8 py-2
                     hover:cursor-pointer hover:bg-green-500
                     border-4 ">
-                    <span className="material-symbols-outlined ">add</span>
-                    Add password
-                </button>
-            </div>
-        </div >
+                        <span class="material-symbols-outlined">key</span>
+                        Add password
+                    </button>
+                </div>
+                <div className="password">
+                    <h1 className=' text-2xl font-bold py-4'>Your Password</h1>
+                    {passwordArray.length === 0 && <div> No password to show </div>}
+                    {passwordArray.length != 0 && (<table className="table-auto w-full border-4  ">
+                        <thead className=' bg-green-800 text-white'>
+                            <tr>
+                                <th className='py-1'>Site </th>
+                                <th className='py-1'>Username</th>
+                                <th className='py-1'>password</th>
+                            </tr>
+                        </thead>
+                        <tbody className='bg-green-200'>
+                            {passwordArray.map((item, index) => {
+                                return <tr key={index}>
+                                    <td className=' py-2 border-3 text-center w-3'><a href="http://"></a>{item.site}</td>
+                                    <td className=' py-2 border-3 text-center w-3'>{item.username}</td>
+                                    <td className=' py-2 border-3 text-center w-3'>{item.password}</td>
+                                </tr>
+                            })
+                            }
+                        </tbody>
+                    </table>
+                    )}
+                </div>
+            </div >
         </>
     )
 }
