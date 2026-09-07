@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from 'react'
 
 const Manager = () => {
     const ref = useRef()
+    const passwordRef = useRef()
+
     const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setpasswordArray] = useState([])
 
@@ -15,12 +17,16 @@ const Manager = () => {
 
 
     const showpassword = (params) => {
-        alert("show the password")
+        passwordRef.current.type = "text"
+
         if (ref.current.src.includes("public/eyeclose.png")) {
+
             ref.current.src = "public/eyeopen.gif"
+            passwordRef.current.type = "password"
         }
         else {
             ref.current.src = "public/eyeclose.png"
+            passwordRef.current.type = "text"
         }
     }
 
@@ -80,9 +86,9 @@ const Manager = () => {
                         <div className="relative">
 
                             {/* input3 password */}
-                            <input value={form.password} onChange={handlechange} placeholder='Enter Password'
+                            <input ref={passwordRef} value={form.password} onChange={handlechange} placeholder='Enter Password'
                                 className="border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
-                                type="text" name="password"
+                                type="password" name="password"
                             />
                             <span className='absolute right-3 top-1 cursor-pointer'
                                 onClick={showpassword}>
@@ -115,7 +121,14 @@ const Manager = () => {
                         <tbody className='bg-green-200'>
                             {passwordArray.map((item, index) => {
                                 return <tr key={index}>
-                                    <td className=' py-2 border-3 text-center w-3'><a href="http://"></a>{item.site}</td>
+
+                                    <td className=' py-2 border-3 text-center w-3'><a href={item.site}
+                                        target='_blank'>{item.site} </a>
+                                        <img
+                                            src="/copy.png"
+                                            alt=""
+                                            className="w-5 h-5 inline-block ml-2 align-middle"/>
+                                    </td>
                                     <td className=' py-2 border-3 text-center w-3'>{item.username}</td>
                                     <td className=' py-2 border-3 text-center w-3'>{item.password}</td>
                                 </tr>
