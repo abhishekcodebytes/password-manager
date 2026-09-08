@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+
 
 const Manager = () => {
     const ref = useRef()
@@ -14,7 +16,20 @@ const Manager = () => {
         }
     }, [])
 
+    // copy karne wala function
 
+    const copytext = async (text) => {
+        await navigator.clipboard.writeText(text)
+
+        toast('Copied successfully!', {
+            position: "top-right",
+            autoClose: 100,
+
+            pauseOnHover: false,
+            closeButton: true,
+            theme: "light",
+        })
+    }
 
     const showpassword = (params) => {
         passwordRef.current.type = "text"
@@ -45,6 +60,23 @@ const Manager = () => {
 
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+                transition={Bounce}
+            />
+
+
+
+
             <div className="absolute inset-0 -z-10 h-full w-full
       bg-white
       bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)]
@@ -122,15 +154,35 @@ const Manager = () => {
                             {passwordArray.map((item, index) => {
                                 return <tr key={index}>
 
-                                    <td className=' py-2 border-3 text-center w-3'><a href={item.site}
+                                    {/* column 1 */}
+
+                                    <td className=' py-2 border-3 cursor-pointer text-center w-3'><a href={item.site}
                                         target='_blank'>{item.site} </a>
                                         <img
-                                            src="/copy.png"
-                                            alt=""
-                                            className="w-5 h-5 inline-block ml-2 align-middle"/>
+                                            src="/copybutton.webp"
+                                            onClick={() => copytext(item.site)}
+                                            className="w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
                                     </td>
-                                    <td className=' py-2 border-3 text-center w-3'>{item.username}</td>
-                                    <td className=' py-2 border-3 text-center w-3'>{item.password}</td>
+
+                                    {/* column 2 */}
+
+                                    <td className=' py-2 border-3 cursor-pointer text-center w-3'>
+                                        {item.username}
+                                        <img
+                                            src="/copybutton.webp"
+                                            onClick={() => copytext(item.username)}
+                                            className="w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
+                                    </td>
+
+                                    {/* column 3 */}
+
+                                    <td className=' py-2 border-3  cursor-pointer text-center w-3'>
+                                        {item.password}
+                                        <img
+                                            src="/copybutton.webp"
+                                            onClick={() => copytext(item.password)}
+                                            className="w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
+                                    </td>
                                 </tr>
                             })
                             }
