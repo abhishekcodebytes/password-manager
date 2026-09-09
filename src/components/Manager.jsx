@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
-
+import { v4 as uuidv4 } from 'uuid';
 
 const Manager = () => {
     const ref = useRef()
@@ -23,7 +23,7 @@ const Manager = () => {
 
         toast('Copied successfully!', {
             position: "top-right",
-            autoClose: 100,
+            autoClose: 2000,
 
             pauseOnHover: false,
             closeButton: true,
@@ -46,11 +46,29 @@ const Manager = () => {
     }
 
     const savepassword = () => {
-        setpasswordArray([...passwordArray, form])
-        localStorage.setItem("password", JSON.stringify([...passwordArray, form]))
+        setpasswordArray([...passwordArray, {...form,id:uuidv4()}])
+        localStorage.setItem("password", JSON.stringify([...passwordArray, {...form,id:uuidv4()}]))
         console.log([...passwordArray, form])
 
     }
+
+    const deletepassword = (id) => {
+        console.log("deleting pass with id " , id)
+        setpasswordArray(passwordArray.filter(item=>item.id!== id))
+        localStorage.setItem("password", JSON.stringify(passwordArray.filter(item=>item.id!== id)))
+        // console.log([...passwordArray, form])
+
+    }
+
+    const editpassword = (id) => {
+        console.log("editing password with id " , id)
+        // setpasswordArray([...passwordArray, {...form,id:uuidv4()}])
+        // localStorage.setItem("password", JSON.stringify([...passwordArray, form]))
+        // console.log([...passwordArray, form])
+
+    }
+
+
 
     const handlechange = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
@@ -65,7 +83,7 @@ const Manager = () => {
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
-                
+
                 rtl={false}
                 pauseOnFocusLoss
                 draggable
@@ -136,7 +154,7 @@ const Manager = () => {
                     hover:cursor-pointer hover:bg-green-500
                     border-4 ">
                         <span class="material-symbols-outlined">key</span>
-                        Add password
+                        Save Password
                     </button>
                 </div>
                 <div className="password">
@@ -148,6 +166,7 @@ const Manager = () => {
                                 <th className='py-1'>Site </th>
                                 <th className='py-1'>Username</th>
                                 <th className='py-1'>password</th>
+                                <th className='py-1'>Actions</th>
                             </tr>
                         </thead>
                         <tbody className='bg-green-200'>
@@ -183,6 +202,30 @@ const Manager = () => {
                                             onClick={() => copytext(item.password)}
                                             className="w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
                                     </td>
+
+                                    {/* column 4 */}
+
+                                    <td className=' py-2 border-3 cursor-pointer  text-center w-3'>
+
+                                        {/* edit button */}
+
+                                        <img
+                                            src="/edit.png"
+                                             
+                                            onClick={()=> {editpassword(item.id)}}
+                                            className="w-5 h-5  cursor-pointer inline-block ml-2 mx-5 align-middle hover:bg-slate-200" />
+
+                                            {/* delete button */}
+
+                                            <img
+                                            src="/delete.png"
+                                             onClick={()=> {deletepassword(item.id)}}
+                                            
+                                            className="w-5 h-5  cursor-pointer inline-block ml-2 mx-3  align-middle hover:bg-slate-200" />
+
+
+                                    </td>
+
                                 </tr>
                             })
                             }
