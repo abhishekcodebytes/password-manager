@@ -2,9 +2,13 @@ import React, { useRef, useState, useEffect } from 'react'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 
+
+
 const Manager = () => {
     const ref = useRef()
     const passwordRef = useRef()
+
+    
 
     const [form, setform] = useState({ site: "", username: "", password: "" })
     const [passwordArray, setpasswordArray] = useState([])
@@ -21,6 +25,7 @@ const Manager = () => {
     const copytext = async (text) => {
         await navigator.clipboard.writeText(text)
 
+        // copy toast
         toast('Copied successfully!', {
             position: "top-right",
             autoClose: 2000,
@@ -46,23 +51,63 @@ const Manager = () => {
     }
 
     const savepassword = () => {
-        setpasswordArray([...passwordArray, {...form,id:uuidv4()}])
-        localStorage.setItem("password", JSON.stringify([...passwordArray, {...form,id:uuidv4()}]))
-        console.log([...passwordArray, form])
 
+        if (form.site.length >0  && form.username.length >0  && form.password.length > 0) {
+
+            setpasswordArray([...passwordArray, { ...form, id: uuidv4() }])
+
+            localStorage.setItem("password", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+            console.log([...passwordArray, form])
+            setform({ site: "", username: "", password: "" })
+
+            toast('password saved successfully!', {
+                position: "top-right",
+                autoClose: 2000,
+                pauseOnHover: false,
+                closeButton: true,
+                theme: "light",
+            });
+        }
+        
+        else {
+            toast('please fill all details then only u can save your password', {
+                position: "top-right",
+                autoClose: 2000,
+                pauseOnHover: false,
+                closeButton: true,
+                theme: "dark",
+            })
+        }
     }
 
     const deletepassword = (id) => {
-        console.log("deleting pass with id " , id)
-        setpasswordArray(passwordArray.filter(item=>item.id!== id))
-        localStorage.setItem("password", JSON.stringify(passwordArray.filter(item=>item.id!== id)))
-        // console.log([...passwordArray, form])
+        console.log("deleting pass with id ", id)
 
+        // alert delete karne ke liye
+        let c = confirm("are you sure u want to delete ")
+        if (c) {
+
+
+            setpasswordArray(passwordArray.filter(item => item.id !== id))
+            localStorage.setItem("password", JSON.stringify(passwordArray.filter(item => item.id !== id)))
+
+            toast('deleted successfully!', {
+                position: "top-right",
+                autoClose: 2000,
+
+                pauseOnHover: false,
+                closeButton: true,
+                theme: "dark",
+            })
+
+        }
     }
 
     const editpassword = (id) => {
-        console.log("editing password with id " , id)
-        // setpasswordArray([...passwordArray, {...form,id:uuidv4()}])
+        console.log("editing password with id ", id)
+        setform(passwordArray.filter(i => i.id === id)[0])
+
+        setpasswordArray(passwordArray.filter(item => item.id !== id))
         // localStorage.setItem("password", JSON.stringify([...passwordArray, form]))
         // console.log([...passwordArray, form])
 
@@ -106,7 +151,7 @@ const Manager = () => {
                 </div>
             </div>
 
-            <div className="mx-auto text-green-800  max-w-4xl mt-1 rounded-2xl text-black p-4">
+            <div className="mx-auto text-green-800  max-w-4xl mt-1 rounded-2xl text-black p-4 px-3 md:mycontainer min-[89vh]">
 
                 <h1 className="text-center text-2xl font-bold">
                     Passop
@@ -120,18 +165,19 @@ const Manager = () => {
 
                     {/* input1 site*/}
                     <input value={form.site} onChange={handlechange} placeholder='Enter website url'
-                        className="border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
+                        className=" border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
                         type="text"
                         name="site"
-                        id=""
+                        id="site"
                     />
 
-                    <div className="flex gap-3">
+                    <div className="flex md:flex-row flex-col gap-3">
 
                         {/* input2 username */}
                         <input value={form.username} onChange={handlechange} placeholder='Enter Username'
                             className="border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
                             type="text" name="username"
+                            id="username"
                         />
                         <div className="relative">
 
@@ -139,6 +185,7 @@ const Manager = () => {
                             <input ref={passwordRef} value={form.password} onChange={handlechange} placeholder='Enter Password'
                                 className="border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
                                 type="password" name="password"
+                                id="password"
                             />
                             <span className='absolute right-3 top-1 cursor-pointer'
                                 onClick={showpassword}>
@@ -157,10 +204,13 @@ const Manager = () => {
                         Save Password
                     </button>
                 </div>
-                <div className="password">
+                <div className="password pb-24">
                     <h1 className=' text-2xl font-bold py-4'>Your Password</h1>
                     {passwordArray.length === 0 && <div> No password to show </div>}
-                    {passwordArray.length != 0 && (<table className="table-auto w-full border-4  ">
+
+                    {passwordArray.length != 0 && 
+                    
+                    (<table className="table-auto w-full border-4  ">
                         <thead className=' bg-green-800 text-white'>
                             <tr>
                                 <th className='py-1'>Site </th>
@@ -175,12 +225,12 @@ const Manager = () => {
 
                                     {/* column 1 */}
 
-                                    <td className=' py-2 border-3 cursor-pointer text-center w-3'><a href={item.site}
+                                    <td className='py-2 border-3  cursor-pointer text-center w-3'><a href={item.site}
                                         target='_blank'>{item.site} </a>
                                         <img
                                             src="/copybutton.webp"
                                             onClick={() => copytext(item.site)}
-                                            className="w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
+                                            className=" w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
                                     </td>
 
                                     {/* column 2 */}
@@ -211,16 +261,16 @@ const Manager = () => {
 
                                         <img
                                             src="/edit.png"
-                                             
-                                            onClick={()=> {editpassword(item.id)}}
+
+                                            onClick={() => { editpassword(item.id) }}
                                             className="w-5 h-5  cursor-pointer inline-block ml-2 mx-5 align-middle hover:bg-slate-200" />
 
-                                            {/* delete button */}
+                                        {/* delete button */}
 
-                                            <img
+                                        <img
                                             src="/delete.png"
-                                             onClick={()=> {deletepassword(item.id)}}
-                                            
+                                            onClick={() => { deletepassword(item.id) }}
+
                                             className="w-5 h-5  cursor-pointer inline-block ml-2 mx-3  align-middle hover:bg-slate-200" />
 
 

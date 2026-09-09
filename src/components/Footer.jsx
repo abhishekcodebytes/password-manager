@@ -2,10 +2,10 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className="bg-slate-800 min-h-16 w-full
-      flex justify-center items-center text-white mt-auto">
+    <footer className="bg-slate-800 h-16  bottom-0 left-0 w-full
+      flex justify-center items-center text-white z-10">
       Made with ❤️ & ☕ by Abhishek
-    </div>
+    </footer>
   )
 }
 
