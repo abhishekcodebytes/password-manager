@@ -246,11 +246,8 @@ const Manager = () => {
                                     {/* column 3 */}
 
                                     <td className=' py-2 border-3  cursor-pointer text-center w-3'>
-                                        {item.password}
-                                        <img
-                                            src="/copybutton.webp"
-                                            onClick={() => copytext(item.password)}
-                                            className="w-5 h-5  cursor-pointer inline-block ml-2 align-middle hover:bg-slate-200" />
+                                        {"*".repeat(item.password.length)}
+                                       
                                     </td>
 
                                     {/* column 4 */}
