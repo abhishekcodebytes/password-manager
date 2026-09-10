@@ -151,9 +151,8 @@ const Manager = () => {
                 </div>
             </div>
 
-            <div className="mx-auto text-green-800  max-w-4xl mt-1 rounded-2xl text-black p-4 px-3 md:mycontainer min-[89vh]">
-
-                <h1 className="text-center text-2xl font-bold">
+<div className="mx-auto text-green-800 w-full max-w-4xl mt-1 rounded-2xl text-black p-3 sm:p-4 md:mycontainer min-h-[89vh]">
+                <h1 className="text-center text-xl sm:text-2xl font-bold">
                     Passop
                 </h1>
 
@@ -161,8 +160,7 @@ const Manager = () => {
                     your own password
                 </p>
 
-                <div className="text-black flex flex-col p-4 gap-7">
-
+<div className="text-black flex flex-col p-3 sm:p-4 gap-5 sm:gap-7">
                     {/* input1 site*/}
                     <input value={form.site} onChange={handlechange} placeholder='Enter website url'
                         className=" border border-green-700 w-full rounded-full px-4 py-2 focus:bg-white"
@@ -197,7 +195,7 @@ const Manager = () => {
 
                     <button onClick={savepassword}
                         className="self-center flex items-center gap-1 font-bold
-                    bg-green-600 rounded-full px-8 py-2
+bg-green-600 rounded-full px-5 sm:px-8 py-2
                     hover:cursor-pointer hover:bg-green-500
                     border-4 ">
                         <span class="material-symbols-outlined">key</span>
@@ -205,12 +203,14 @@ const Manager = () => {
                     </button>
                 </div>
                 <div className="password pb-24">
-                    <h1 className=' text-2xl font-bold py-4'>Your Password</h1>
+                   <h1 className='text-xl sm:text-2xl font-bold py-4'>Your Password</h1>
                     {passwordArray.length === 0 && <div> No password to show </div>}
 
                     {passwordArray.length != 0 && 
                     
-                    (<table className="table-auto w-full border-4  ">
+                    // (<table className="table-auto w-full border-4  ">
+                    (<div className="overflow-x-auto w-full">
+    <table className="table-auto w-full min-w-[600px] border-4">
                         <thead className=' bg-green-800 text-white'>
                             <tr>
                                 <th className='py-1'>Site </th>
@@ -277,8 +277,9 @@ const Manager = () => {
                             })
                             }
                         </tbody>
-                    </table>
-                    )}
+</table>
+</div>
+)}
                 </div>
             </div >
         </>
